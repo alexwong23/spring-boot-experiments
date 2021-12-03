@@ -1,4 +1,4 @@
-package com.example.experiments.controller;
+package com.example.experiments.controller.api;
 
 import com.example.experiments.model.Account.User;
 import com.example.experiments.service.UserService;
@@ -8,20 +8,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "user/")
-public class UserController {
+@RequestMapping(path = "api/v1/user/")
+public class UserApiController {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserApiController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
     public List<User> getUsers() {
-        // i want to render a page!
-
         return userService.getUsers();
     }
 

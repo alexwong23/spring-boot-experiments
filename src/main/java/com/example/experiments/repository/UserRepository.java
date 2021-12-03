@@ -6,8 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// Annotation not needed on interfaces that extend JpaRepository
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findUserByEmail(String email);
+    // NOTE: repository is
+    //      where data is stored and
+    //      provides CRUD operations on objects
+
+    // NOTE: Spring generated query cause it follows naming standard findBy___
+    Optional<User> findByEmail(String email);
 }
