@@ -38,7 +38,7 @@ public class UserService {
     }
 
     // add new user
-    public void addUser(User user) {
+    public long addUser(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(s -> {
                     throw new IllegalStateException("Email has been taken");
@@ -47,29 +47,37 @@ public class UserService {
         // NOTE: ifPresent is cleaner than Optional.isPresent()
         // if(userOptional.isPresent()) throw new ...
 
-        userRepository.save(user);
+        User newUser = userRepository.save(user);
+        userRepository.flush();
+        return newUser.getId();
     }
 
     // update existing user
     @Transactional
-    public void updateUser(Long userId, String username, String email) {
+    public void updateUser(Long userId, User newUserDetails) {
         // throw if invalid information provided
-        if(username == null || username.length() < 6 || email == null || email.length() < 6)
-            throw new IllegalArgumentException("Invalid username and email provided");
+        if(newUserDetails.getUsername() == null || newUserDetails.getPassword() == null || newUserDetails.getEmail() == null ||
+            newUserDetails.getUsername().length() < 6  || newUserDetails.getPassword().length() < 6 || newUserDetails.getEmail().length() < 6)
+            throw new IllegalArgumentException("Invalid Username, Password or Email provided");
 
         // find existing user by id
-        User user = userRepository.findById(userId)
+        User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("No user with id " + userId + " found"));
 
         // check if email has been taken
-        userRepository.findByEmail(email).ifPresent(s -> {
-            throw new IllegalStateException("Email has been taken");
-        });
+        userRepository.findByEmail(newUserDetails.getEmail())
+                .filter(p -> p != existingUser)
+                .ifPresent(s -> { throw new IllegalStateException("Email has been taken"); });
 
         // save new data
-        user.setUsername(username);
-        user.setEmail(email);
-        userRepository.save(user);
+        existingUser.setUsername(newUserDetails.getUsername());
+        existingUser.setPassword(newUserDetails.getPassword());
+        existingUser.setEmail(newUserDetails.getEmail());
+        if(newUserDetails.getFirstName() != null && !newUserDetails.getFirstName().trim().isEmpty())
+            existingUser.setFirstName(newUserDetails.getFirstName());
+        if(newUserDetails.getLastName() != null && !newUserDetails.getLastName().trim().isEmpty())
+            existingUser.setLastName(newUserDetails.getLastName());
+        userRepository.save(existingUser);
     }
 
     // delete existing user

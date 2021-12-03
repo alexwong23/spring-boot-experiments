@@ -3,12 +3,15 @@ package com.example.experiments.controller;
 import com.example.experiments.model.Account.User;
 import com.example.experiments.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
-@RestController
-@RequestMapping(path = "user/")
+@Controller
+@RequestMapping(path = "user")
 public class UserController {
 
     private final UserService userService;
@@ -19,31 +22,49 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        // i want to render a page!
+    public String getAllUsers(Model model) {
+        model.addAttribute("users", userService.getUsers());
+        return "user";
+    }
 
-        return userService.getUsers();
+    @GetMapping("/new")
+    public String newUser() {
+        return "user-new";
     }
 
     @GetMapping(path = "{userId}")
-    public User getUser(@PathVariable("userId") Long userId) {
-        return userService.getUser(userId);
+    public String getUser(@PathVariable("userId") Long userId, Model model) {
+        model.addAttribute("user", userService.getUser(userId));
+        return "user-edit";
     }
 
     @PostMapping
-    public void createNewUser(@RequestBody User user) {
-        userService.addUser(user);
+    public String createNewUser(
+            @RequestParam(required = true) String username,
+            @RequestParam(required = true) String password,
+            @RequestParam(required = true) String email,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName) {
+        User newUser = new User(username, password, email, firstName, lastName, LocalDate.now());
+        long userId = userService.addUser(newUser);
+        return "redirect:/user/" + String.valueOf(userId);
     }
 
     @PutMapping(path = "{userId}")
-    public void updateUser(@PathVariable("userId") Long userId,
-                           @RequestParam(required = false) String name,
-                           @RequestParam(required = false) String email) {
-        userService.updateUser(userId, name, email);
+    public String updateUser(@PathVariable("userId") Long userId,
+                           @RequestParam(required = true) String username,
+                           @RequestParam(required = true) String password,
+                           @RequestParam(required = true) String email,
+                           @RequestParam(required = false) String firstName,
+                           @RequestParam(required = false) String lastName) {
+        User newUserDetails = new User(username, password, email, firstName, lastName, LocalDate.now());
+        userService.updateUser(userId, newUserDetails);
+        return "redirect:/user/" + userId;
     }
 
     @DeleteMapping(path = "{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId) {
+    public String deleteUser(@PathVariable("userId") Long userId) {
         userService.deleteUser(userId);
+        return "redirect:/user";
     }
 }
