@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // returns custom JSON error response, and overrides status code
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<CustomErrorResponse> customHandleNotFound(Exception ex, WebRequest request) {
+    @ExceptionHandler({UserNotFoundException.class})
+    public ResponseEntity<CustomErrorResponse> customHandleNotFound(Exception ex) {
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());
         errors.setStatus(HttpStatus.NOT_FOUND.value());
-        errors.setError("HttpStatus.NOT_FOUND.toString()");
+        errors.setError(HttpStatus.NOT_FOUND.toString());
         errors.setMessage(ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
