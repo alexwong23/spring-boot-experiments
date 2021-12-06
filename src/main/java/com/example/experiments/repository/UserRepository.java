@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 // Annotation not needed on interfaces that extend JpaRepository
+// Repository - class interacts with datasource
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 

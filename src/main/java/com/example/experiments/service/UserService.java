@@ -1,5 +1,6 @@
 package com.example.experiments.service;
 
+import com.example.experiments.error.UserNotFoundException;
 import com.example.experiments.model.Account.User;
 import com.example.experiments.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-// NOTE: Service - manipulates the data
+// NOTE: Service - perform all access to database and holds business logic of application
 @Service
 public class UserService {
 
@@ -29,7 +30,7 @@ public class UserService {
     public User getUser(Long userId) {
         // NOTE: findById provided by interface
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("No user with id " + userId + " found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         // NOTE: orElseThrow is cleaner than !Optional.isPresent()
         // if(!userOptional.isPresent()) throw new ...
@@ -62,7 +63,7 @@ public class UserService {
 
         // find existing user by id
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("No user with id " + userId + " found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         // check if email has been taken
         userRepository.findByEmail(newUserDetails.getEmail())
@@ -85,7 +86,7 @@ public class UserService {
         // NOTE: existsById provided by interface
         boolean exists = userRepository.existsById(userId);
         if(!exists)
-            throw new IllegalStateException("No user with id " + userId + " found");
+            throw new UserNotFoundException(userId);
         userRepository.deleteById(userId);
     }
 }

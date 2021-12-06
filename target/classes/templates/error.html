@@ -5,7 +5,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-  <p th:text="'Error ' + ${statusCode} + ': ' + ${message}" />
-  <p th:text="'Url: ' + ${url}" />
+  <p th:text="'Error ' + ${status} + ' - ' + ${error}" />
+  <div th:switch="${status == 404}">
+    <p th:case="${true}" th:text="'Path: ' + ${path}" />
+    <p th:case="*" th:text="'Message: ' + ${message}" />
+  </div>
 </body>
 </html>
