@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-  <form action="#" th:action="@{/user/{id}(id=${user.id})}" th:method="put" >
+  <form action="#" th:action="@{/user/{id}(id=${user.id})}" th:method="put" th:object="${updateUser}" >
     <label>Username:</label>
     <input type="text" name="username" th:value="${user.username}" /><br>
     <label>Password:</label>

@@ -5,10 +5,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-  <p th:text="'Error ' + ${status} + ' - ' + ${error}" />
-  <div th:switch="${status == 404}">
-    <p th:case="${true}" th:text="'Path: ' + ${path}" />
-    <p th:case="*" th:text="'Message: ' + ${message}" />
-  </div>
+  <p th:text="'Error ' + ${errors.status} + ' - ' + ${errors.error}" />
+  <p th:text="'Message: ' + ${errors.message}" />
+  <p th:if="${path != null}" th:text="'Path: ' + ${path}" />
 </body>
 </html>

@@ -1,14 +1,17 @@
 package com.example.experiments.controller.api;
 
+import com.example.experiments.error.exceptions.ApiUserNotFoundException;
+import com.example.experiments.error.exceptions.UserApiException;
 import com.example.experiments.model.Account.User;
 import com.example.experiments.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/user/")
+@RequestMapping(path = "api/v1/user")
 public class UserApiController {
 
     private final UserService userService;
@@ -20,29 +23,45 @@ public class UserApiController {
 
     @GetMapping
     public List<User> getUsers() {
-        return userService.getUsers();
+        return userService.findAllUsers();
     }
 
     @GetMapping(path = "{userId}")
     public User getUser(@PathVariable("userId") Long userId) {
-        return userService.getUser(userId);
+        try {
+            return userService.findUserById(userId);
+        } catch(Exception ex) {
+            throw new ApiUserNotFoundException(userId); // NOTE: Catch and throw custom JSON error
+        }
     }
 
-    // TODO: gotta revamp
-//    @PostMapping
-//    public void createNewUser(@RequestBody User user) {
-//        userService.addUser(user);
-//    }
-//
-//    @PutMapping(path = "{userId}")
-//    public void updateUser(@PathVariable("userId") Long userId,
-//                           @RequestParam(required = false) String name,
-//                           @RequestParam(required = false) String email) {
-//        userService.updateUser(userId, name, email);
-//    }
+    @PostMapping
+    public void createNewUser(@ModelAttribute User newUser) {
+        try {
+            newUser.setDob(LocalDate.now());
+            userService.addOneUser(newUser);
+        } catch(Exception ex) {
+            throw new UserApiException(ex.getMessage()); // NOTE: Catch and throw custom JSON error
+        }
+    }
+
+    @PutMapping(path = "{userId}")
+    public void updateUser(@PathVariable("userId") Long userId,
+                             @ModelAttribute User updateUser) {
+        try {
+            updateUser.setDob(LocalDate.now());
+            userService.updateUserById(userId, updateUser);
+        } catch(Exception ex) {
+            throw new UserApiException(ex.getMessage()); // NOTE: Catch and throw custom JSON error
+        }
+    }
 
     @DeleteMapping(path = "{userId}")
     public void deleteUser(@PathVariable("userId") Long userId) {
-        userService.deleteUser(userId);
+        try {
+            userService.deleteUserById(userId);
+        } catch(Exception ex) {
+            throw new ApiUserNotFoundException(userId); // NOTE: Catch and throw custom JSON error
+        }
     }
 }

@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping
     public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getUsers());
+        model.addAttribute("users", userService.findAllUsers());
         return "user";
     }
 
@@ -33,37 +33,28 @@ public class UserController {
 
     @GetMapping(path = "{userId}")
     public String getUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("user", userService.getUser(userId));
+        model.addAttribute("user", userService.findUserById(userId));
         return "user-edit";
     }
 
     @PostMapping
-    public String createNewUser(
-            @RequestParam(required = true) String username,
-            @RequestParam(required = true) String password,
-            @RequestParam(required = true) String email,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName) {
-        User newUser = new User(username, password, email, firstName, lastName, LocalDate.now());
-        long userId = userService.addUser(newUser);
-        return "redirect:/user/" + String.valueOf(userId);
+    public String createNewUser(@ModelAttribute User newUser) {
+        newUser.setDob(LocalDate.now());
+        userService.addOneUser(newUser);
+        return "redirect:/user";
     }
 
     @PutMapping(path = "{userId}")
     public String updateUser(@PathVariable("userId") Long userId,
-                           @RequestParam(required = true) String username,
-                           @RequestParam(required = true) String password,
-                           @RequestParam(required = true) String email,
-                           @RequestParam(required = false) String firstName,
-                           @RequestParam(required = false) String lastName) {
-        User newUserDetails = new User(username, password, email, firstName, lastName, LocalDate.now());
-        userService.updateUser(userId, newUserDetails);
+                             @ModelAttribute User updateUser) {
+        updateUser.setDob(LocalDate.now());
+        userService.updateUserById(userId, updateUser);
         return "redirect:/user/" + userId;
     }
 
     @DeleteMapping(path = "{userId}")
     public String deleteUser(@PathVariable("userId") Long userId) {
-        userService.deleteUser(userId);
+        userService.deleteUserById(userId);
         return "redirect:/user";
     }
 }

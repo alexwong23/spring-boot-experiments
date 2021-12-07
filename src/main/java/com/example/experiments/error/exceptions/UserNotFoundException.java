@@ -1,4 +1,4 @@
-package com.example.experiments.error;
+package com.example.experiments.error.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(Long id) {

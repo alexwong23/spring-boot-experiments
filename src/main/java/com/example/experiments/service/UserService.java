@@ -1,6 +1,6 @@
 package com.example.experiments.service;
 
-import com.example.experiments.error.UserNotFoundException;
+import com.example.experiments.error.exceptions.UserNotFoundException;
 import com.example.experiments.model.Account.User;
 import com.example.experiments.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 // NOTE: Service - perform all access to database and holds business logic of application
 @Service
@@ -22,12 +21,12 @@ public class UserService {
     }
 
     // find all users
-    public List<User> getUsers() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     // find one user by id
-    public User getUser(Long userId) {
+    public User findUserById(Long userId) {
         // NOTE: findById provided by interface
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
@@ -39,7 +38,7 @@ public class UserService {
     }
 
     // add new user
-    public long addUser(User user) {
+    public long addOneUser(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(s -> {
                     throw new IllegalStateException("Email has been taken");
@@ -55,7 +54,7 @@ public class UserService {
 
     // update existing user
     @Transactional
-    public void updateUser(Long userId, User newUserDetails) {
+    public void updateUserById(Long userId, User newUserDetails) {
         // throw if invalid information provided
         if(newUserDetails.getUsername() == null || newUserDetails.getPassword() == null || newUserDetails.getEmail() == null ||
             newUserDetails.getUsername().length() < 6  || newUserDetails.getPassword().length() < 6 || newUserDetails.getEmail().length() < 6)
@@ -82,7 +81,7 @@ public class UserService {
     }
 
     // delete existing user
-    public void deleteUser(Long userId) {
+    public void deleteUserById(Long userId) {
         // NOTE: existsById provided by interface
         boolean exists = userRepository.existsById(userId);
         if(!exists)
