@@ -1,7 +1,7 @@
 package com.example.experiments.error;
 
-import com.example.experiments.error.exceptions.ApiUserNotFoundException;
 import com.example.experiments.error.exceptions.UserApiException;
+import com.example.experiments.error.exceptions.UserApiNotFoundException;
 import com.example.experiments.error.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     // NOTE: API returns custom JSON error response, and overrides status code
-    @ExceptionHandler({ApiUserNotFoundException.class})
+    @ExceptionHandler({UserApiNotFoundException.class})
     public ResponseEntity<CustomErrorResponse> userApiNotFound(Exception ex) {
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());

@@ -1,7 +1,7 @@
 package com.example.experiments.controller.api;
 
-import com.example.experiments.error.exceptions.ApiUserNotFoundException;
 import com.example.experiments.error.exceptions.UserApiException;
+import com.example.experiments.error.exceptions.UserApiNotFoundException;
 import com.example.experiments.model.Account.User;
 import com.example.experiments.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class UserApiController {
         try {
             return userService.findUserById(userId);
         } catch(Exception ex) {
-            throw new ApiUserNotFoundException(userId); // NOTE: Catch and throw custom JSON error
+            throw new UserApiNotFoundException(userId); // NOTE: Catch and throw custom JSON error
         }
     }
 
@@ -61,7 +61,7 @@ public class UserApiController {
         try {
             userService.deleteUserById(userId);
         } catch(Exception ex) {
-            throw new ApiUserNotFoundException(userId); // NOTE: Catch and throw custom JSON error
+            throw new UserApiNotFoundException(userId); // NOTE: Catch and throw custom JSON error
         }
     }
 }
