@@ -21,7 +21,7 @@ public class UserTest {
                 "juliuscaesar@gmail.com",
                 "Julius",
                 "Caesar",
-                LocalDate.of(1994, Month.SEPTEMBER, 15));;
+                LocalDate.of(1994, Month.SEPTEMBER, 15));
         user.setId(256L);
     }
 

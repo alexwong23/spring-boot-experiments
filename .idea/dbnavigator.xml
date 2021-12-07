@@ -24,7 +24,12 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="a19c736b-729b-45fe-828f-a3d949125883">
+        <schema name="pg_catalog" object-types="table, view, function" />
+        <schema name="public" object-types="table, view, function" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a19c736b-729b-45fe-828f-a3d949125883">
