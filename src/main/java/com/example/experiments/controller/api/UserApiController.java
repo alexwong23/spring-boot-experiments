@@ -38,7 +38,7 @@ public class UserApiController {
     @PostMapping
     public void createNewUser(@ModelAttribute User newUser) {
         try {
-            newUser.setDob(LocalDate.now());
+            newUser.setDob(LocalDate.now()); // TODO: DOB value should be provided in form
             userService.addOneUser(newUser);
         } catch(Exception ex) {
             throw new UserApiException(ex.getMessage()); // NOTE: Catch and throw custom JSON error
@@ -49,7 +49,7 @@ public class UserApiController {
     public void updateUser(@PathVariable("userId") Long userId,
                              @ModelAttribute User updateUser) {
         try {
-            updateUser.setDob(LocalDate.now());
+            updateUser.setDob(LocalDate.now()); // TODO: DOB value should be provided in form
             userService.updateUserById(userId, updateUser);
         } catch(Exception ex) {
             throw new UserApiException(ex.getMessage()); // NOTE: Catch and throw custom JSON error

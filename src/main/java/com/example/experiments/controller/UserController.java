@@ -39,7 +39,7 @@ public class UserController {
 
     @PostMapping
     public String createNewUser(@ModelAttribute User newUser) {
-        newUser.setDob(LocalDate.now());
+        newUser.setDob(LocalDate.now()); // TODO: DOB value should be provided in form
         userService.addOneUser(newUser);
         return "redirect:/user";
     }
@@ -47,7 +47,7 @@ public class UserController {
     @PutMapping(path = "{userId}")
     public String updateUser(@PathVariable("userId") Long userId,
                              @ModelAttribute User updateUser) {
-        updateUser.setDob(LocalDate.now());
+        updateUser.setDob(LocalDate.now()); // TODO: DOB value should be provided in form
         userService.updateUserById(userId, updateUser);
         return "redirect:/user/" + userId;
     }

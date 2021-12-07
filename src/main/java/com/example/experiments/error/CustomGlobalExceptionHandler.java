@@ -38,6 +38,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
+    // NOTE: API returns custom JSON error response, and overrides status code
     @ExceptionHandler({UserApiException.class})
     public ResponseEntity<CustomErrorResponse> userApiInternalError(Exception ex) {
         CustomErrorResponse errors = new CustomErrorResponse();
