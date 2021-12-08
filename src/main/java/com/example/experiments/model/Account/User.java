@@ -1,6 +1,7 @@
 package com.example.experiments.model.Account;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -23,38 +24,45 @@ public class User extends Person implements Account {
     @SequenceGenerator(
             name = "user_sequence",
             sequenceName = "user_sequence",
-            allocationSize = 1
+            allocationSize = 1 // amount to increment when allocating sequence numbers
     )
     @GeneratedValue(
-            strategy = SEQUENCE,
+            strategy = SEQUENCE, // use DB sequence for ID generation
             generator = "user_sequence"
     )
     @Column(
             name = "id",
-            updatable = false
+            updatable = false // column not included in SQL UPDATE statements
     )
     private Long id;
 
     @Column(
             name = "username",
-            nullable = false,
-            columnDefinition = "TEXT",
+            columnDefinition = "TEXT", // TEXT datatype in POSTGRESQL
             unique = true
     )
+    @NotNull // preferred over nullable = false as validation takes place before Hibernate sends SQL queries to the DB
+    @NotEmpty(message = "Username cannot be empty")
+    @Size(min=2, max=30)
     private String username;
 
     @Column(
             name = "password",
-            nullable = false,
             columnDefinition = "TEXT"
     )
+    @NotNull
+    @NotEmpty(message = "Password cannot be empty")
+    @Size(max = 30)
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "Minimum eight chars, at least one lowercase, one uppercase and one number")
     private String password;
 
     @Column(
             name = "email",
-            nullable = false,
             columnDefinition = "TEXT"
     )
+    @NotNull
+    @NotEmpty(message = "Email cannot be empty")
+    @Email(message = "Must be a valid email address")
     private String email;
 
     public User() {

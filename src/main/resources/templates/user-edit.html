@@ -5,17 +5,30 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-  <form action="#" th:action="@{/user/{id}(id=${user.id})}" th:method="put" th:object="${updateUser}" >
-    <label>Username:</label>
-    <input type="text" name="username" th:value="${user.username}" /><br>
-    <label>Password:</label>
-    <input type="password" name="password" /><br>
-    <label>Email:</label>
-    <input type="email" name="email" th:value="${user.email}" /><br>
-    <label>First name:</label>
-    <input type="text" name="firstName" th:value="${user.firstName}" /><br>
-    <label>Last name:</label>
-    <input type="text" name="lastName" th:value="${user.lastName}" /><br>
+  <style>
+      .error { color: red; }
+  </style>
+  <form action="#" th:action="@{/user/{id}(id=${updateUser.id})}" th:method="put" th:object="${updateUser}" >
+    <div>
+      <label>Username:</label> <input type="text" th:field="*{username}" />
+      <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:errorclass="error">Invalid Username</p>
+    </div>
+    <div>
+      <label>Password:</label> <input type="password" th:field="*{password}" />
+      <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="error">Invalid Password</p>
+    </div>
+    <div>
+      <label>Email:</label> <input type="text" th:field="*{email}" />
+      <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="error">Invalid Email</p>
+    </div>
+    <div>
+      <label>First name:</label> <input type="text" th:field="*{firstName}" />
+      <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" th:errorclass="error">Invalid First Name</p>
+    </div>
+    <div>
+      <label>Last name:</label> <input type="text" th:field="*{lastName}" />
+      <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" th:errorclass="error">Invalid Last Name</p>
+    </div>
     <button type="submit" id="submitButton"> Submit </button>
   </form>
 </body>

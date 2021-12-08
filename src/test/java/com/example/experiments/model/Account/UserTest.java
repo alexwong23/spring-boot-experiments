@@ -17,7 +17,7 @@ public class UserTest {
     public void setUp() {
         user = new User(
                 "julius99",
-                "gloryOfRome",
+                "gloryOfRome3",
                 "juliuscaesar@gmail.com",
                 "Julius",
                 "Caesar",
@@ -42,11 +42,11 @@ public class UserTest {
 
     @Test
     public void TestGetPassword_CaseSensitive_ShouldFail() {
-        assertNotEquals(user.getPassword(), "GloryOfRome");
+        assertNotEquals(user.getPassword(), "GloryOfRome3");
     }
 
     @Test
     public void TestGetPassword_Valid_ShouldPass() {
-        assertEquals(user.getPassword(), "gloryOfRome");
+        assertEquals(user.getPassword(), "gloryOfRome3");
     }
 }

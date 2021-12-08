@@ -62,14 +62,14 @@ public class AppConfiguration {
             // retrieve configured instance
             User user = new User(
                     "MoSalahhh",
-                    "PASSW_RD",
+                    "PaSSW0eeRD4",
                     "jamessoh@gmail.com",
                     "James",
                     "Soh",
                     LocalDate.of(2000, Month.JANUARY, 5));
             User user2 = new User(
                     "julius922",
-                    "gloryOfRome",
+                    "gloryOfRomsde3",
                     "juliuscaesar@gmail.com",
                     "Julius",
                     "Caesar",

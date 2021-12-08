@@ -42,28 +42,28 @@ public class UserServiceTest {
         MockitoAnnotations.openMocks(this);
         userOne = new User(
                 "MoSalahhh",
-                "PASSW_RD",
+                "PASSW0RD2s",
                 "jamessoh@gmail.com",
                 "James",
                 "Soh",
                 LocalDate.of(2000, Month.JANUARY, 5));
         userTwo = new User(
                 "julius99",
-                "gloryOfRome",
+                "gloryOfRome3",
                 "juliuscaesar@gmail.com",
                 "Julius",
                 "Caesar",
                 LocalDate.of(1994, Month.SEPTEMBER, 15));
         userThree = new User(
                 "alexwong23",
-                "someRando",
+                "someRando3",
                 "alexwong23@gmail.com",
                 "Alex",
                 "Wong",
                 null);
         userFour = new User(
                 "newUser",
-                "passwordhere",
+                "passwordheR3",
                 "newuser@gmail.com",
                 "New",
                 "User",

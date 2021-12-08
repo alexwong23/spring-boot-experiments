@@ -3,6 +3,9 @@ package com.example.experiments.model.Account;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -10,18 +13,20 @@ import java.time.Period;
 public abstract class Person {
     @Column(
             name = "first_name",
-            nullable = false,
             columnDefinition = "TEXT"
     )
     private String firstName;
+
     @Column(
             name = "last_name",
             columnDefinition = "TEXT"
     )
     private String lastName;
+
     @Column
     private LocalDate dob;
-    @Transient
+
+    @Transient // field does not persist in DB
     private Integer age;
 
     public Person() {}

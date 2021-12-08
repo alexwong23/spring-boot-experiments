@@ -11,12 +11,12 @@
 
   <bean id="admin" class="com.example.experiments.model.Account.Admin">
     <property name="username" value="admin1"></property>
-    <property name="password" value="Supersafe"></property>
+    <property name="password" value="Supersafe22"></property>
   </bean>
 
   <bean id="user" class="com.example.experiments.model.Account.User">
     <property name="username" value="user2"></property>
-    <property name="password" value="someRando"></property>
+    <property name="password" value="somessRand0"></property>
     <property name="email" value="user2@gmail.com"></property>
     <property name="firstName" value="Alex"></property>
     <property name="lastName" value="Wong"></property>
