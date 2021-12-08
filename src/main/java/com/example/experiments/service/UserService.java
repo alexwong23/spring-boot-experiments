@@ -38,7 +38,7 @@ public class UserService {
     }
 
     // add new user
-    public long addOneUser(User user) {
+    public User addOneUser(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(s -> {
                     throw new IllegalStateException("Email has been taken");
@@ -49,7 +49,7 @@ public class UserService {
 
         User newUser = userRepository.save(user);
         userRepository.flush();
-        return newUser.getId();
+        return newUser;
     }
 
     // update existing user
