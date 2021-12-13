@@ -30,7 +30,7 @@ public class UserServiceTest {
     @Mock // NOTE: Creates mock object to be injected
     private UserRepository userRepository;
     @InjectMocks // NOTE: Create and inject the mock object (@Mock) into it
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     private List<User> users = new ArrayList<>();
     private User userOne, userTwo, userThree, userFour;
@@ -76,7 +76,7 @@ public class UserServiceTest {
         // NOTE: add behaviour of findAll()
         Mockito.when(userRepository.findAll()).thenReturn(users);
 
-        List<User> userList = userService.findAllUsers();
+        List<User> userList = userServiceImpl.findAllUsers();
         assertTrue(userList.equals(users));
 
         // NOTE: verify call to service was made AND with same arguments
@@ -88,7 +88,7 @@ public class UserServiceTest {
         Long userId = 3L;
         Mockito.when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(userThree));
 
-        User found = userService.findUserById(userId);
+        User found = userServiceImpl.findUserById(userId);
         assertTrue(found.equals(userThree));
 
         Mockito.verify(userRepository).findById(userId);
@@ -100,7 +100,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findById(userId)).thenThrow(new UserNotFoundException(userId));
 
         Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            userService.findUserById(userId);
+            userServiceImpl.findUserById(userId);
         });
         assertEquals(exception.getMessage(), "User id not found: " + userId);
 
@@ -112,7 +112,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByEmail(userFour.getEmail())).thenReturn(java.util.Optional.empty());
         Mockito.when(userRepository.save(any(User.class))).thenReturn(userFour);
 
-        User newUser = userService.addOneUser(userFour);
+        User newUser = userServiceImpl.addOneUser(userFour);
         assertTrue(newUser.equals(userFour));
 
         Mockito.verify(userRepository).findByEmail(userFour.getEmail());
@@ -124,7 +124,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByEmail(userOne.getEmail())).thenThrow(new IllegalStateException("Email has been taken"));
 
         Exception exception = assertThrows(IllegalStateException.class, () -> {
-            userService.addOneUser(userOne);
+            userServiceImpl.addOneUser(userOne);
         });
         assertEquals(exception.getMessage(), "Email has been taken");
 
@@ -146,8 +146,8 @@ public class UserServiceTest {
         userOne.setLastName(newDetails.getLastName());
         Mockito.when(userRepository.save(any(User.class))).thenReturn(userOne);
 
-        userService.updateUserById(userOne.getId(), newDetails);
-        User found = userService.findUserById(userOne.getId());
+        userServiceImpl.updateUserById(userOne.getId(), newDetails);
+        User found = userServiceImpl.findUserById(userOne.getId());
         assertTrue(found.equals(userOne));
 
         // NOTE: Mock findById() twice
@@ -163,7 +163,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.existsById(userOne.getId())).thenReturn(true);
         Mockito.doNothing().when(userRepository).deleteById(userOne.getId());
 
-        userService.deleteUserById(userOne.getId());
+        userServiceImpl.deleteUserById(userOne.getId());
 
         Mockito.verify(userRepository).existsById(userOne.getId());
         Mockito.verify(userRepository).deleteById(userOne.getId());
@@ -174,7 +174,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.existsById(userFour.getId())).thenReturn(false);
 
         Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            userService.deleteUserById(userFour.getId());
+            userServiceImpl.deleteUserById(userFour.getId());
         });
         assertEquals(exception.getMessage(), "User id not found: " + userFour.getId());
 

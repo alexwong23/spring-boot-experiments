@@ -8,9 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
+// it will fire up a servlet container and serve up our service
 @org.springframework.boot.autoconfigure.SpringBootApplication
 public class SpringBootApplication {
 

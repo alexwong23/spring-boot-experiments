@@ -63,7 +63,8 @@
       <artifactId>javax.persistence-api</artifactId>
       <version>2.2</version>
     </dependency>
-    <!-- END OF SPRING JPA DEPENDENCIES-->
+  <!-- END OF SPRING JPA DEPENDENCIES-->
+
 	</dependencies>
 
 	<build>

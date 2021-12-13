@@ -42,6 +42,7 @@ public class UserController {
         return "user-edit";
     }
 
+    // @Valid annotation - tell Spring to validate parameter
     @PostMapping
     public String createNewUser(@Valid @ModelAttribute(value="newUser") User newUser, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) return "user-new";

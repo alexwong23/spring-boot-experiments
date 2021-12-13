@@ -7,6 +7,8 @@ import com.example.experiments.model.Item.ConsumableItem;
 import com.example.experiments.model.Item.DecorItem;
 import com.example.experiments.model.Item.Item;
 import com.example.experiments.repository.UserRepository;
+import com.example.experiments.service.UserService;
+import com.example.experiments.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,6 +26,11 @@ import java.util.List;
 public class AppConfiguration {
 
     public static Logger log = LoggerFactory.getLogger(Admin.class);
+
+    @Bean
+    public UserService userService(UserRepository userRepository) {
+        return new UserServiceImpl(userRepository);
+    }
 
     @Bean
     @ConditionalOnProperty(value = "account.service.mode", havingValue = "admin", matchIfMissing = false)
