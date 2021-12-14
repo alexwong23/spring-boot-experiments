@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     // update existing user
     @Transactional
-    public void updateUserById(Long userId, User newUserDetails) {
+    public User updateUserById(Long userId, User newUserDetails) {
         // throw if invalid information provided
         if(newUserDetails.getUsername() == null || newUserDetails.getPassword() == null || newUserDetails.getEmail() == null ||
                 newUserDetails.getUsername().length() < 6  || newUserDetails.getPassword().length() < 6 || newUserDetails.getEmail().length() < 6)
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
             existingUser.setFirstName(newUserDetails.getFirstName());
         if(newUserDetails.getLastName() != null && !newUserDetails.getLastName().trim().isEmpty())
             existingUser.setLastName(newUserDetails.getLastName());
-        userRepository.save(existingUser);
+        return userRepository.save(existingUser);
     }
 
     // delete existing user

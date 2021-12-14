@@ -47,8 +47,8 @@ public class UserController {
     public String createNewUser(@Valid @ModelAttribute(value="newUser") User newUser, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) return "user-new";
         newUser.setDob(LocalDate.now()); // TODO: DOB value should be provided in form
-        userService.addOneUser(newUser);
-        return "redirect:/user";
+        User userSaved = userService.addOneUser(newUser);
+        return "redirect:/user/" + userSaved.getId();
     }
 
     @PutMapping(path = "{userId}")

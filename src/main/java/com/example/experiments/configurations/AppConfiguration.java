@@ -28,11 +28,6 @@ public class AppConfiguration {
     public static Logger log = LoggerFactory.getLogger(Admin.class);
 
     @Bean
-    public UserService userService(UserRepository userRepository) {
-        return new UserServiceImpl(userRepository);
-    }
-
-    @Bean
     @ConditionalOnProperty(value = "account.service.mode", havingValue = "admin", matchIfMissing = false)
     public Account admin() {
         return new Admin();

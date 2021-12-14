@@ -23,7 +23,7 @@ public interface UserService {
 
     // update existing user
     @Transactional
-    public void updateUserById(Long userId, User newUserDetails);
+    public User updateUserById(Long userId, User newUserDetails);
 
     // delete existing user
     public void deleteUserById(Long userId);
