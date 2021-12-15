@@ -27,9 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 
 public class UserServiceTest {
 
-    @Mock // NOTE: Creates mock object to be injected
+    @Mock           // NOTE: Creates mock object to be injected
     private UserRepository userRepository;
-    @InjectMocks // NOTE: Create and inject the mock object (@Mock) into it
+    @InjectMocks    // NOTE: Create and inject the mock object (@Mock) into it
     private UserServiceImpl userServiceImpl;
 
     private List<User> users = new ArrayList<>();

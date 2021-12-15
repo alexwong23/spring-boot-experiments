@@ -14,8 +14,7 @@
 6. using spring security 
    1. https://www.baeldung.com/exception-handling-for-rest-with-spring
    2. https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-java/
-
-
+   
    
 # Additional
 1. use REACT framework
@@ -27,7 +26,5 @@
 # Difficulty implementing
 1. Custom error page - unable to change url to '/error' when error
 2. Controller Test
-   1. unable to define UserService in the UserController constructor
-      1. https://blog.devgenius.io/spring-boot-deep-dive-on-unit-testing-92bbdf549594
-   2. unable to figure out how to test bindingResult input errors
+   1. unable to figure out how to test bindingResult input errors
    

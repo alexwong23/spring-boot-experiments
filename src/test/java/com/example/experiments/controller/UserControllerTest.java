@@ -34,31 +34,33 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(UserController.class)
-@ComponentScan(basePackages = "com.example.experiments")
+@ExtendWith(SpringExtension.class) // extends behaviour of test classes/methods - integrates Spring TestContext Framework into JUnit5's Jupiter programming model
+@WebMvcTest(UserController.class) // scans only the UserController rather than entire application - have to provide mock of its dependencies
+@ComponentScan(basePackages = "com.example.experiments.controller.api") // tells Spring to manage annotated components in scanned packages
 public class UserControllerTest {
 
-    // NOTE: https://stackoverflow.com/questions/63311426/mockmvc-is-not-autowired-it-is-null
-    //  https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
+    // NOTE: MockMVC Integration testing guide -> https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
 
-    @Autowired
-    private MockMvc mvc;
-    @MockBean
+    @Autowired          // injects with repositories wired - don't need WebApplicationContext
+    private MockMvc mvc; // main entry point for server-side Spring MVC testing
+
+    @MockBean       // NOTE: add/replace mock objects in Spring Application Context
     private UserRepository userRepository;
     @MockBean
     private UserService userService;
-    @InjectMocks
+    @InjectMocks    // NOTE: Create and inject the mock object (@Mock) into it
     private UserController userController;
 
     private List<User> users = new ArrayList<>();
     private User userOne, userTwo, userThree, userFour;
     private static Logger log = LoggerFactory.getLogger(UserControllerTest.class);
 
+    private final String USERCONTROLLER_PATH = "/user";
+    private final String USERAPICONTROLLER_PATH = "/api/v1/user";
+
     @BeforeEach
     public void Setup() {
-        userOne = new User(
-                "MoSalahhh",
+        userOne = new User("MoSalahhh",
                 "PASSW0RD2s",
                 "jamessoh@gmail.com",
                 "James",
@@ -91,7 +93,7 @@ public class UserControllerTest {
     @Test
     public void TestUserController_FindAllUsers_ShouldPass() throws Exception {
         Mockito.when(userService.findAllUsers()).thenReturn(users);
-        this.mvc.perform(get("/user"))
+        this.mvc.perform(get(USERCONTROLLER_PATH))
                 .andExpect(model().attribute("users", users))
                 .andExpect(status().isOk());
         Mockito.verify(userService).findAllUsers();
@@ -99,21 +101,21 @@ public class UserControllerTest {
 
     @Test
     public void TestUserController_FindUserById_ShouldPass() throws Exception {
-        Long userid = 2L;
-        Mockito.when(userService.findUserById(userid)).thenReturn(userTwo);
-        this.mvc.perform(get("/user/" + userid))
+        Long userId = 2L;
+        Mockito.when(userService.findUserById(userId)).thenReturn(userTwo);
+        this.mvc.perform(get(USERCONTROLLER_PATH + "/" + userId))
                 .andExpect(model().attribute("updateUser", userTwo))
                 .andExpect(status().isOk());
-        Mockito.verify(userService).findUserById(userid);
+        Mockito.verify(userService).findUserById(userId);
     }
 
     @Test
     public void TestUserController_CreateNewUser_ShouldPass() throws Exception {
-        Long userid = 4L;
+        Long userId = 4L;
         Mockito.when(userService.addOneUser(any(User.class))).thenReturn(userFour);
-        userFour.setId(userid);
+        userFour.setId(userId); // manually set userId
 
-        this.mvc.perform(post("/user")
+        this.mvc.perform(post(USERCONTROLLER_PATH)
                         .param("username", userFour.getUsername())
                         .param("password", userFour.getPassword())
                         .param("email", userFour.getEmail())
@@ -121,19 +123,19 @@ public class UserControllerTest {
                         .param("lastName", userFour.getLastName())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user/" + userFour.getId()))
+                .andExpect(redirectedUrl(USERCONTROLLER_PATH + "/" + userFour.getId()))
                 .andDo(print());
 
-        assertTrue(userFour.getId() == userid);
+        assertTrue(userFour.getId() == userId);
         Mockito.verify(userService).addOneUser(any(User.class));
     }
 
     @Test
     public void TestUserController_UpdateUser_ShouldPass() throws Exception {
-        Long userid = 2L;
-        Mockito.when(userService.updateUserById(userid, userTwo)).thenReturn(userTwo);  // returns userTwo with id NULL
+        Long userId = 2L;
+        Mockito.when(userService.updateUserById(userId, userTwo)).thenReturn(userTwo);  // returns userTwo with id NULL
 
-        this.mvc.perform(put("/user/" + userid)
+        this.mvc.perform(put(USERCONTROLLER_PATH + "/" + userId)
                         .param("username", userTwo.getUsername())
                         .param("password", userTwo.getPassword())
                         .param("email", userTwo.getEmail())
@@ -141,45 +143,45 @@ public class UserControllerTest {
                         .param("lastName", userTwo.getLastName())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user/" + userid));
+                .andExpect(redirectedUrl(USERCONTROLLER_PATH + "/" + userId));
 
         assertTrue(userTwo.getId() == null);
-        Mockito.verify(userService).updateUserById(userid, userTwo);
+        Mockito.verify(userService).updateUserById(userId, userTwo);
     }
 
     @Test
     public void TestUserController_DeleteUser_ShouldPass() throws Exception {
-        Long userid = 2L;
-        Mockito.doNothing().when(userService).deleteUserById(userid);
+        Long userId = 2L;
+        Mockito.doNothing().when(userService).deleteUserById(userId); // doNothing cause method returns void
 
-        this.mvc.perform(delete("/user/" + userid)
+        this.mvc.perform(delete(USERCONTROLLER_PATH + "/" + userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user"));
+                .andExpect(redirectedUrl(USERCONTROLLER_PATH));
 
-        Mockito.verify(userService).deleteUserById(userid);
+        Mockito.verify(userService).deleteUserById(userId);
     }
 
     @Test
     public void TestUserController_DeleteUser_ShouldFail() throws Exception {
-        Long userid = 4L;
-        doThrow(new UserNotFoundException(userid)).when(userService).deleteUserById(userid);
+        Long userId = 4L;
+        doThrow(new UserNotFoundException(userId)).when(userService).deleteUserById(userId);
 
-        this.mvc.perform(delete("/user/" + userid)
+        this.mvc.perform(delete(USERCONTROLLER_PATH + "/" + userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(view().name("error"))
                 .andExpect(model().attribute("errors", hasProperty("status", Matchers.equalTo(404))))
                 .andExpect(model().attribute("errors",
-                        hasProperty("message", Matchers.equalTo("User id not found: " + userid))));
+                        hasProperty("message", Matchers.equalTo("User id not found: " + userId))));
 
-        Mockito.verify(userService).deleteUserById(userid);
+        Mockito.verify(userService).deleteUserById(userId);
     }
 
     @Test
     public void TestUserApiController_CreateNewUser_ShouldPass() throws Exception {
         Mockito.when(userService.addOneUser(userFour)).thenReturn(userFour);
 
-        this.mvc.perform(post("/api/v1/user")
+        this.mvc.perform(post(USERAPICONTROLLER_PATH)
                     .param("username", userFour.getUsername())
                     .param("password", userFour.getPassword())
                     .param("email", userFour.getEmail())
@@ -200,7 +202,7 @@ public class UserControllerTest {
     public void TestUserApiController_CreateNewUser_ShouldFail() throws Exception {
         Mockito.when(userService.addOneUser(userFour)).thenThrow(new IllegalStateException("Email has been taken"));
 
-        this.mvc.perform(post("/api/v1/user")
+        this.mvc.perform(post(USERAPICONTROLLER_PATH)
                         .param("username", userFour.getUsername())
                         .param("password", userFour.getPassword())
                         .param("email", userFour.getEmail())
@@ -215,10 +217,10 @@ public class UserControllerTest {
 
     @Test
     public void TestUserApiController_UpdateUser_ShouldPass() throws Exception {
-        Long userid = 2L;
-        Mockito.when(userService.updateUserById(userid, userTwo)).thenReturn(userTwo);  // returns userTwo with id NULL
+        Long userId = 2L;
+        Mockito.when(userService.updateUserById(userId, userTwo)).thenReturn(userTwo);  // returns userTwo with id NULL
 
-        this.mvc.perform(put("/api/v1/user/" + userid)
+        this.mvc.perform(put(USERAPICONTROLLER_PATH + "/" + userId)
                         .param("username", userTwo.getUsername())
                         .param("password", userTwo.getPassword())
                         .param("email", userTwo.getEmail())
@@ -233,19 +235,19 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(userTwo.getLastName()));
 
         assertTrue(userTwo.getId() == null);
-        Mockito.verify(userService).updateUserById(userid, userTwo);
+        Mockito.verify(userService).updateUserById(userId, userTwo);
     }
 
     @Test
     public void TestUserApiController_DeleteUser_ShouldPass() throws Exception {
-        Long userid = 2L;
-        Mockito.doNothing().when(userService).deleteUserById(userid);
+        Long userId = 2L;
+        Mockito.doNothing().when(userService).deleteUserById(userId);
 
-        this.mvc.perform(delete("/api/v1/user/" + userid)
+        this.mvc.perform(delete(USERAPICONTROLLER_PATH + "/" + userId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isAccepted());
 
-        Mockito.verify(userService).deleteUserById(userid);
+        Mockito.verify(userService).deleteUserById(userId);
     }
 
 }
