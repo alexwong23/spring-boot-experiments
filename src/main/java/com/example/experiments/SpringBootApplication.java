@@ -11,7 +11,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-// it will fire up a servlet container and serve up our service
+// NOTE: it will fire up a servlet container and serve up our service
+// TODO: difference between autoconfigure.SpringBootApplication and normal
 @org.springframework.boot.autoconfigure.SpringBootApplication
 public class SpringBootApplication {
 
@@ -19,35 +20,12 @@ public class SpringBootApplication {
 
 	// command to run ./gradlew bootRun
 	public static void main(String[] args) {
-
 		ConfigurableApplicationContext context = SpringApplication.run(SpringBootApplication.class, args);
+		log.info("-------------------Start of Program-------------------");
 
 		try {
-			// default account type is User
-			Account defaultAccount = context.getBean(Account.class);
-			log.info(String.valueOf(defaultAccount));
-
-			// create and configure beans
-			ApplicationContext appContext = new ClassPathXmlApplicationContext("file:src/main/resources/beans/accounts.xml");
-
-			// retrieve configured instance
-			Account admin = appContext.getBean("admin", Account.class);
-			log.info(String.valueOf(admin));
-
-			// default item category is Decor
-			Item defaultItem = context.getBean(Item.class);
-			log.info(String.valueOf(defaultItem));
-
-			// create and configure beans
-			appContext = new ClassPathXmlApplicationContext("file:src/main/resources/beans/items.xml");
-
-			// retrieve configured instance
-			Item consumableItem = appContext.getBean("consumableItem", Item.class);
-			log.info(String.valueOf(consumableItem));
-
-			// retrieve configured instance
-			Item decorItem = appContext.getBean("decorItem", Item.class);
-			log.info(String.valueOf(decorItem));
+			Account defaultAccount = context.getBean(Account.class); // NOTE: default account type is User
+			log.info("default: " + String.valueOf(defaultAccount));
 		} catch(Exception e) {
 			log.info("An error occurred in the application: " + e.getMessage());
 		}

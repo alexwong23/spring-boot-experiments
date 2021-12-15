@@ -12,7 +12,6 @@
 
   <bean id="decorItem" class="com.example.experiments.model.Item.DecorItem">
     <property name="name" value="Sofa"></property>
-    <property name="category" value="Decora"></property>
     <property name="price" value="899.99"></property>
   </bean>
 </beans>

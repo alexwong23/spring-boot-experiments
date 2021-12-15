@@ -34,7 +34,7 @@ public class AppConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "account.service.mode", havingValue = "user", matchIfMissing = true)
+    @ConditionalOnProperty(value = "account.service.mode", havingValue = "user", matchIfMissing = true) // NOTE: default type
     public Account user() {
         return new User();
     }
@@ -46,12 +46,13 @@ public class AppConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "item.service.mode", havingValue = "decor", matchIfMissing = true) // returned if nothing found
+    @ConditionalOnProperty(value = "item.service.mode", havingValue = "decor", matchIfMissing = true) // NOTE: default type
     public Item decorItemService() {
         return new DecorItem();
     }
 
     @Bean
+    // TODO: what does this do?
     CommandLineRunner commandLineRunner(UserRepository userRepository) {
         return args -> {
             // create and configure beans

@@ -1,5 +1,7 @@
 package com.example.experiments.model.Account;
 
+import java.util.Objects;
+
 public class Admin implements Account {
     private Long id;
     private String username;
@@ -17,6 +19,19 @@ public class Admin implements Account {
         return "\nId: " + this.id +
                 "\nUsername: " + this.username +
                 "\nPassword: " + this.password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Admin admin = (Admin) o;
+        return Objects.equals(id, admin.id) && Objects.equals(username, admin.username) && Objects.equals(password, admin.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password);
     }
 
     public Long getId() { return this.id; }

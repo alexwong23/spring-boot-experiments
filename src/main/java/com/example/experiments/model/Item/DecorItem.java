@@ -1,5 +1,7 @@
 package com.example.experiments.model.Item;
 
+import java.util.Objects;
+
 public class DecorItem implements Item {
     private String name;
     private String category;
@@ -20,6 +22,19 @@ public class DecorItem implements Item {
         return "\nItem Name: " + this.name +
                 "\nItem Category: " + this.category +
                 "\nItem Price: " + this.price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DecorItem decorItem = (DecorItem) o;
+        return Objects.equals(name, decorItem.name) && Objects.equals(category, decorItem.category) && Objects.equals(price, decorItem.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, category, price);
     }
 
     public String getName() {

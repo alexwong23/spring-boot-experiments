@@ -14,6 +14,12 @@
     <property name="password" value="Supersafe22"></property>
   </bean>
 
+  <bean id="badAdmin" class="com.example.experiments.model.Account.Admin">
+    <property name="id" value="2"></property>
+    <property name="username" value="admin1"></property>
+    <property name="password" value="Supersafe22"></property>
+  </bean>
+
   <bean id="user" class="com.example.experiments.model.Account.User">
     <property name="username" value="user2"></property>
     <property name="password" value="somessRand0"></property>
