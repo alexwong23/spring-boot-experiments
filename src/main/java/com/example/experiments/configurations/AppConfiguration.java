@@ -6,21 +6,11 @@ import com.example.experiments.model.Account.User;
 import com.example.experiments.model.Item.ConsumableItem;
 import com.example.experiments.model.Item.DecorItem;
 import com.example.experiments.model.Item.Item;
-import com.example.experiments.repository.UserRepository;
-import com.example.experiments.service.UserService;
-import com.example.experiments.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.List;
 
 @Configuration
 public class AppConfiguration {
@@ -49,35 +39,5 @@ public class AppConfiguration {
     @ConditionalOnProperty(value = "item.service.mode", havingValue = "decor", matchIfMissing = true) // NOTE: default type
     public Item decorItemService() {
         return new DecorItem();
-    }
-
-    @Bean
-    // TODO: what does this do?
-    CommandLineRunner commandLineRunner(UserRepository userRepository) {
-        return args -> {
-            // create and configure beans
-            ApplicationContext appContext = new ClassPathXmlApplicationContext("file:src/main/resources/beans/accounts.xml");
-
-            // retrieve configured instance
-            Account userBean = appContext.getBean("user", Account.class);
-            log.info(String.valueOf(userBean));
-
-            // retrieve configured instance
-            User user = new User(
-                    "MoSalahhh",
-                    "PaSSW0eeRD4",
-                    "jamessoh@gmail.com",
-                    "James",
-                    "Soh",
-                    LocalDate.of(2000, Month.JANUARY, 5));
-            User user2 = new User(
-                    "julius922",
-                    "gloryOfRomsde3",
-                    "juliuscaesar@gmail.com",
-                    "Julius",
-                    "Caesar",
-                    LocalDate.of(1994, Month.SEPTEMBER, 15));
-            userRepository.saveAll(List.of(user, user2, (User) userBean));
-        };
     }
 }

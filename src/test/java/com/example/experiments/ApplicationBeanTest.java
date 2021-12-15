@@ -1,6 +1,9 @@
-package com.example.experiments.model.Account;
+package com.example.experiments;
 
-import com.example.experiments.SpringBootApplication;
+import com.example.experiments.application.Application;
+import com.example.experiments.model.Account.Account;
+import com.example.experiments.model.Account.Admin;
+import com.example.experiments.model.Account.User;
 import com.example.experiments.model.Item.ConsumableItem;
 import com.example.experiments.model.Item.DecorItem;
 import com.example.experiments.model.Item.Item;
@@ -21,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = SpringBootApplication.class)
+@SpringBootTest(classes = Application.class)
 public class ApplicationBeanTest {
 
     private static ConfigurableApplicationContext context;
@@ -37,7 +40,7 @@ public class ApplicationBeanTest {
     @BeforeAll
     public static void Initialisation() {
 //        SpringBootApplication.main(new String[] { });
-        context = SpringApplication.run(SpringBootApplication.class, new String[] { });
+        context = SpringApplication.run(Application.class, new String[] { });
     }
 
     @BeforeEach
