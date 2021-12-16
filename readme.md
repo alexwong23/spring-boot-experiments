@@ -1,19 +1,27 @@
 # Spring Boot, JPA
 
 # Things to do
-1. abstract class constructor vs child constructor 
-2. access modifier default vs protected examples!
-3. java 8 vs java 11
 
 7. Dependency Injection
-    1. autowired?
+   1. Singleton scope creates object but twice
+      1. https://www.youtube.com/watch?v=K43qyHJXmWI&ab_channel=Telusko
+      2. singleton vs prototype
+   2. definition of autowired?
+      1. https://www.google.com/search?q=why+use+%40autowired+in+spring&sxsrf=AOaemvIk52xwIODgYoRfOXaI24GcAIZmOA%3A1639545897985&ei=KXy5Yc7LO92N4-EPvqScmA8&oq=autowired+in+spring&gs_lcp=Cgdnd3Mtd2l6EAEYAjIHCCMQsAMQJzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQsAMQQ0oECEEYAEoECEYYAFAAWABgqRNoAXACeACAAQCIAQCSAQCYAQDIAQrAAQE&sclient=gws-wiz
+   3. bean vs component
+      1. https://stackoverflow.com/questions/10604298/spring-component-versus-bean
 
-5. create login and sign up forms
-   1. hash Password
 
-6. using spring security 
-   1. https://www.baeldung.com/exception-handling-for-rest-with-spring
-   2. https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-java/
+9. abstract class constructor vs child constructor
+10. access modifier default vs protected examples!
+11. java 8 vs java 11
+
+12. create login and sign up forms
+    1. hash Password
+
+13. using spring security 
+    1. https://www.baeldung.com/exception-handling-for-rest-with-spring
+    2. https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-java/
    
    
 # Additional

@@ -1,9 +1,13 @@
 package com.example.experiments.controller;
 
+import com.example.experiments.application.Application;
 import com.example.experiments.error.exceptions.UserNotFoundException;
 import com.example.experiments.model.Account.User;
 import com.example.experiments.repository.UserRepository;
 import com.example.experiments.service.UserService;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +38,11 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class) // extends behaviour of test classes/methods - integrates Spring TestContext Framework into JUnit5's Jupiter programming model
-@WebMvcTest(UserController.class) // scans only the UserController rather than entire application - have to provide mock of its dependencies
-@ComponentScan(basePackages = "com.example.experiments.controller.api") // tells Spring to manage annotated components in scanned packages
+@SpringBootTest(classes={Application.class})
+@AutoConfigureMockMvc
+//@ExtendWith(SpringExtension.class) // extends behaviour of test classes/methods - integrates Spring TestContext Framework into JUnit5's Jupiter programming model
+//@WebMvcTest(UserController.class) // scans only the UserController rather than entire application - have to provide mock of its dependencies
+//@ComponentScan(basePackages = "com.example.experiments.controller.api") // tells Spring to manage annotated components in scanned packages
 public class UserControllerTest {
 
     // NOTE: MockMVC Integration testing guide -> https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/

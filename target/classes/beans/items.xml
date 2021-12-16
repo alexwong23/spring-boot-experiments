@@ -6,12 +6,25 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <bean id="consumableItem" class="com.example.experiments.model.Item.ConsumableItem">
-    <property name="name" value="Water"></property>
-    <property name="price" value="1.50"></property>
+    <constructor-arg index="0" value="Water" />
+    <constructor-arg index="1" value="1.50" />
+    <constructor-arg index="2" ref="manufacturer" /> <!-- NOTE: referencing field Manufacturer -->
+  </bean>
+
+  <bean id="manufacturer" class="com.example.experiments.model.Item.Manufacturer">
+    <constructor-arg index="0" value="StarBucks" />
+    <constructor-arg index="1" value="United States" />
   </bean>
 
   <bean id="decorItem" class="com.example.experiments.model.Item.DecorItem">
-    <property name="name" value="Sofa"></property>
-    <property name="price" value="899.99"></property>
+    <constructor-arg index="0" value="Sofa" />
+    <constructor-arg index="1" value="899.99" />
+    <constructor-arg index="2" ref="decorManufacturer" /> <!-- NOTE: referencing field Manufacturer -->
   </bean>
+
+  <bean id="decorManufacturer" class="com.example.experiments.model.Item.Manufacturer">
+    <constructor-arg index="0" value="Ikea" />
+    <constructor-arg index="1" value="Sweden" />
+  </bean>
+
 </beans>

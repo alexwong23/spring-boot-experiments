@@ -7,6 +7,7 @@ import com.example.experiments.model.Account.User;
 import com.example.experiments.model.Item.ConsumableItem;
 import com.example.experiments.model.Item.DecorItem;
 import com.example.experiments.model.Item.Item;
+import com.example.experiments.model.Item.Manufacturer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,21 +16,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
+@Configuration
+@ComponentScan(basePackages = "com.example.experiments.*")  	// tells Spring to manage annotated components
+@EntityScan("com.example.experiments.model.*") 					// tells Spring to scan for entity classes
 public class ApplicationBeanTest {
 
     private static ConfigurableApplicationContext context;
 
-    // TODO: what happens if i mock this?
+    // TODO: what happens if i autowire this?
     private Account userBean, adminBean;
     private Item consumableItemBean, decorItemBean;
 
@@ -56,10 +64,12 @@ public class ApplicationBeanTest {
                 "Supersafe22");
         consumableItemBean = new ConsumableItem(
                 "Water",
-                1.50);
+                1.50,
+                new Manufacturer("StarBucks", "United States"));
         decorItemBean = new DecorItem(
                 "Sofa",
-                899.99);
+                899.99,
+                new Manufacturer("Ikea", "Sweden"));
     }
 
     @Test
@@ -72,10 +82,10 @@ public class ApplicationBeanTest {
                             defaultAccount.getPassword() == null);
 
         Item defaultItem = context.getBean(Item.class);
-        assertEquals(defaultItem.getClass(), DecorItem.class);  // default Item type is DECOR
+        assertEquals(defaultItem.getClass(), ConsumableItem.class);  // NOTE: default Item type declared in application.properties
         assertTrue(defaultItem.getName() == null &&
                             defaultItem.getPrice() == null &&
-                            defaultItem.getCategory().equals("Decor"));
+                            defaultItem.getCategory().equals("Consumable"));
     }
 
     @Test
@@ -103,6 +113,21 @@ public class ApplicationBeanTest {
         assertEquals(exception.getMessage(), "No bean named 'badId' available");
     }
 
+
+    // TODO:
+    //  User class default scope Singleton: only one instance created!
+    //  if User class has scope prototype: more than one instance created!
+    @Test
+    public void TestGetBean_Singleton_ShouldPass() {
+        ApplicationContext appContext = new ClassPathXmlApplicationContext(ACCOUNTS_XMLFILEPATH);
+
+        Account user = appContext.getBean("user", Account.class);
+        Account user2 = appContext.getBean("user", Account.class);
+
+        log.info("user: " + user);
+        log.info("user2: " + user2);
+    }
+
     @Test
     public void TestGetBean_ExtraFields_ShouldFail() {
         ApplicationContext appContext = new ClassPathXmlApplicationContext(ACCOUNTS_XMLFILEPATH);
@@ -114,18 +139,25 @@ public class ApplicationBeanTest {
     }
 
     @Test
-    public void TestGetBean_Items_ShouldPass() {
+    public void TestGetBean_AutowiredItems_ShouldPass() {
         ApplicationContext appContext = new ClassPathXmlApplicationContext(ITEMS_XMLFILEPATH);
 
-        Item consumableItem = appContext.getBean("consumableItem", Item.class);
+        Item consumableItem = appContext.getBean("consumableItem", Item.class); // NOTE: Constructor Injection - items.xml file
         assertEquals(consumableItem.getClass(), ConsumableItem.class);
         assertEquals(consumableItemBean.getClass(), ConsumableItem.class);
         assertTrue(consumableItem.equals(consumableItemBean));
+        assertEquals(((ConsumableItem) consumableItem).getManufacturer().toString(), "Manufacturer{name='StarBucks', country='United States'}");
 
         Item decorItem = appContext.getBean("decorItem", Item.class);
         assertEquals(decorItem.getClass(), DecorItem.class);
         assertEquals(decorItemBean.getClass(), DecorItem.class);
         assertTrue(decorItem.equals(decorItemBean));
+        assertEquals(((DecorItem) decorItem).getManufacturer().toString(), "Manufacturer{name='Ikea', country='Sweden'}");
+
+        Item decorItem2 = appContext.getBean("decorItem", Item.class);
+
+        log.info("decorItem: " + decorItem);
+        log.info("decorItem2: " + decorItem2);
     }
 
 }

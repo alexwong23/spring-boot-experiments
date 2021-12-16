@@ -1,27 +1,39 @@
 package com.example.experiments.model.Item;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Objects;
 
 public class ConsumableItem implements Item {
     private String name;
     private String category;
     private Double price;
+    private Manufacturer manufacturer;
+
+    private static Logger log = LoggerFactory.getLogger(ConsumableItem.class);
 
     public ConsumableItem() {
         this.category = "Consumable";
     }
 
-    public ConsumableItem(String name, Double price) {
+    @Autowired // NOTE: Constructor Injection - items.xml file
+    public ConsumableItem(String name, Double price, Manufacturer manufacturer) {
         this(); // constructor chaining
         this.name = name;
         this.price = price;
+        this.manufacturer = manufacturer;
     }
 
     @Override
     public String toString() {
-        return "\nItem Name: " + this.name +
-                "\nItem Category: " + this.category +
-                "\nItem Price: " + this.price;
+        return "ConsumableItem{" +
+                "name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                ", manufacturer=" + manufacturer +
+                '}';
     }
 
     @Override
@@ -54,6 +66,14 @@ public class ConsumableItem implements Item {
     }
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Manufacturer getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }
 
