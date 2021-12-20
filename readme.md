@@ -3,14 +3,14 @@
 # Things to do
 
 7. Dependency Injection
-   1. Singleton scope creates object but twice
-      1. https://www.youtube.com/watch?v=K43qyHJXmWI&ab_channel=Telusko
-      2. singleton vs prototype
+   1. Singleton vs prototype
+      1. singleton for stateless session beans https://www.javatpoint.com/stateless-session-bean
+      2. prototype for stateful session beans https://www.javatpoint.com/stateful-session-bean
    2. definition of autowired?
       1. https://www.google.com/search?q=why+use+%40autowired+in+spring&sxsrf=AOaemvIk52xwIODgYoRfOXaI24GcAIZmOA%3A1639545897985&ei=KXy5Yc7LO92N4-EPvqScmA8&oq=autowired+in+spring&gs_lcp=Cgdnd3Mtd2l6EAEYAjIHCCMQsAMQJzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQRxCwAzIHCAAQsAMQQ0oECEEYAEoECEYYAFAAWABgqRNoAXACeACAAQCIAQCSAQCYAQDIAQrAAQE&sclient=gws-wiz
    3. bean vs component
       1. https://stackoverflow.com/questions/10604298/spring-component-versus-bean
-
+      2. https://stackoverflow.com/questions/39173982/what-is-a-nosuchbeandefinitionexception-and-how-do-i-fix-it
 
 9. abstract class constructor vs child constructor
 10. access modifier default vs protected examples!

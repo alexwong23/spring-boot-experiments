@@ -3,13 +3,14 @@ package com.example.experiments.model.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-//@Component
-//@Scope("singleton")
 public class DecorItem implements Item {
     private String name;
     private String category;
@@ -20,7 +21,7 @@ public class DecorItem implements Item {
 
     public DecorItem() {
         this.category = "Decor";
-        log.info("decorItem object created!");
+        log.info("Decor Bean Instantiated!");
     }
 
     @Autowired

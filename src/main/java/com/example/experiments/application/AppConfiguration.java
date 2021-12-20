@@ -1,24 +1,23 @@
-package com.example.experiments.configurations;
+package com.example.experiments.application;
 
 import com.example.experiments.model.Account.Account;
 import com.example.experiments.model.Account.Admin;
 import com.example.experiments.model.Account.User;
-import com.example.experiments.model.Item.ConsumableItem;
-import com.example.experiments.model.Item.DecorItem;
-import com.example.experiments.model.Item.Item;
-import com.example.experiments.model.Item.Manufacturer;
+import com.example.experiments.model.Item.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 
-// NOTE: Bean and Configuration introduced to get rid of XML bean definition
+// TODO: bean vs configuration
+//  Bean and Configuration introduced to get rid of XML bean definition
 //  Bean returns a customizable instance of spring bean
 //  Component defines a class that may be later instantiated by Spring IoC engine when needed
 //      one-to-one mapping between annotated class and the bean
 @Configuration
+@ComponentScan("com.example.experiments.*") // tells Spring to manage annotated components
 public class AppConfiguration {
 
     public static Logger log = LoggerFactory.getLogger(Admin.class);
@@ -35,20 +34,21 @@ public class AppConfiguration {
         return new User();
     }
 
-    @Bean
+    @Bean(name = "consumableItem")
+    @Qualifier(value = "consumableItem")
     @ConditionalOnProperty(value = "item.default.type", havingValue = "consumable", matchIfMissing = false)
-    public Item consumableItemService() {
+    public Item consumableItem() {
         return new ConsumableItem();
     }
 
-    @Bean
+
+    @Bean(name = "decorItem")
+    @Qualifier(value = "decorItem")
+    @Primary
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     @ConditionalOnProperty(value = "item.default.type", havingValue = "decor", matchIfMissing = true) // NOTE: default type
-    public Item decorItemService() {
+    public Item decorItem() {
         return new DecorItem();
     }
 
-//    @Bean
-//    public Manufacturer manufacturerService() {
-//        return new Manufacturer();
-//    }
 }

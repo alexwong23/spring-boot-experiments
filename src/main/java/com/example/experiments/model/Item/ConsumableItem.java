@@ -16,9 +16,10 @@ public class ConsumableItem implements Item {
 
     public ConsumableItem() {
         this.category = "Consumable";
+        log.info("Consumable Bean Instantiated!");
     }
 
-    @Autowired // NOTE: Constructor Injection - items.xml file
+    @Autowired // NOTE : Constructor Injection - items.xml file
     public ConsumableItem(String name, Double price, Manufacturer manufacturer) {
         this(); // constructor chaining
         this.name = name;

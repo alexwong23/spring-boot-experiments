@@ -45,16 +45,17 @@ import java.util.List;
 //@ComponentScan(basePackages = "com.example.experiments.controller.api") // tells Spring to manage annotated components in scanned packages
 public class UserControllerTest {
 
-    // NOTE: MockMVC Integration testing guide -> https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
+    // MockMVC Integration testing guide
+    //  -> https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
 
-    @Autowired          // injects with repositories wired - don't need WebApplicationContext
-    private MockMvc mvc; // main entry point for server-side Spring MVC testing
+    @Autowired              // injects with repositories wired - don't need WebApplicationContext
+    private MockMvc mvc;    // main entry point for server-side Spring MVC testing
 
-    @MockBean       // NOTE: add/replace mock objects in Spring Application Context
+    @MockBean               // NOTE: add/replace mock objects in Spring Application Context
     private UserRepository userRepository;
     @MockBean
     private UserService userService;
-    @InjectMocks    // NOTE: Create and inject the mock object (@Mock) into it
+    @InjectMocks            // NOTE: Create and inject the mock object (@Mock) into it
     private UserController userController;
 
     private List<User> users = new ArrayList<>();

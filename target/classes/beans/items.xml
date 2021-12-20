@@ -16,7 +16,7 @@
     <constructor-arg index="1" value="United States" />
   </bean>
 
-  <bean id="decorItem" class="com.example.experiments.model.Item.DecorItem">
+  <bean id="decorItem" class="com.example.experiments.model.Item.DecorItem" scope="prototype"> <!-- NOTE: prototype scope -->
     <constructor-arg index="0" value="Sofa" />
     <constructor-arg index="1" value="899.99" />
     <constructor-arg index="2" ref="decorManufacturer" /> <!-- NOTE: referencing field Manufacturer -->
@@ -25,6 +25,10 @@
   <bean id="decorManufacturer" class="com.example.experiments.model.Item.Manufacturer">
     <constructor-arg index="0" value="Ikea" />
     <constructor-arg index="1" value="Sweden" />
+  </bean>
+
+  <bean id="listedItem" class="com.example.experiments.model.Item.ListedItem" scope="prototype">
+    <property name="item" ref="decorItem"></property> <!-- NOTE: referencing decor Item -->
   </bean>
 
 </beans>
