@@ -35,21 +35,24 @@ public class ScopeTest {
     @BeforeEach
     public void SetUp() { }
 
-    // NOTE :
-    //  Class default scope Singleton: only one instance created!
-    //  if class has scope prototype: more than one instance created!
+    // NOTE : Class default scope Singleton
+    //      only one instance created!
+    //      both objects referring to same bean instance
     @Test
     public void TestScope_DefaultSingleton_ShouldPass() {
         ApplicationContext appContext = new ClassPathXmlApplicationContext(ITEMS_XMLFILEPATH);
         // NOTE : Consumable Bean only initialised ONCE
         Item consumableItem = appContext.getBean("consumableItem", Item.class);
         Item consumableItem2 = appContext.getBean("consumableItem", Item.class);
+        consumableItem2.setName("Mineral Water");
         assertEquals(consumableItem.getClass(), ConsumableItem.class);
         assertEquals(((ConsumableItem) consumableItem).getManufacturer().toString(), "Manufacturer{name='StarBucks', country='United States'}");
         assertTrue(consumableItem.equals(consumableItem2));
     }
 
-    // NOTE : Prototype scope defined in AppConfiguration and XML file
+    // NOTE : Class with scope prototype (defined in AppConfiguration and XML file)
+    //      more than one instance created!
+    //      both objects referring to different bean instances
     @Test
     public void TestScope_Prototype_ShouldPass() {
         ApplicationContext appContext = new ClassPathXmlApplicationContext(ITEMS_XMLFILEPATH);
@@ -57,9 +60,10 @@ public class ScopeTest {
         log.info("-------Decor Bean Initialisation-------");
         Item decorItem = appContext.getBean("decorItem", Item.class);
         Item decorItem2 = appContext.getBean("decorItem", Item.class);
+        decorItem2.setName("Dinner Table");
         assertEquals(decorItem.getClass(), DecorItem.class);
         assertEquals(((DecorItem) decorItem).getManufacturer().toString(), "Manufacturer{name='Ikea', country='Sweden'}");
-        assertTrue(decorItem.equals(decorItem2));
+        assertFalse(decorItem.equals(decorItem2)); // NOTE : not the same instance
 
 
         // NOTE : Listed Bean (autowires items) initialised TWICE
@@ -68,8 +72,9 @@ public class ScopeTest {
         Item decorListed = listedItem.getItem();
         ListedItem listedItem2 = appContext.getBean("listedItem", ListedItem.class);
         Item decorListed2 = listedItem2.getItem();
+        decorListed2.setName("Dinner Table");
         assertEquals(decorListed.getClass(), DecorItem.class);
         assertEquals(((DecorItem) decorListed).getManufacturer().toString(), "Manufacturer{name='Ikea', country='Sweden'}");
-        assertTrue(decorListed.equals(decorListed2));
+        assertFalse(decorListed.equals(decorListed2));
     }
 }
